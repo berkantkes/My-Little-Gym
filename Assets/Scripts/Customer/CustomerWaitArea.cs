@@ -8,7 +8,8 @@ public class CustomerWaitArea : MonoBehaviour
     [SerializeField] private Image _passingTimeImage;
     [SerializeField] private float _waitingTime = 2;
     [SerializeField] private CustomersManager _customersManager;
-    [SerializeField] private SportsAreaManager sportsAreaManager;
+    [SerializeField] private SportsAreaManager _sportsAreaManager;
+    [SerializeField] private MoneyStackManager _moneyStackManager;
 
     private float _timer;
     private bool _isTiming;
@@ -21,7 +22,7 @@ public class CustomerWaitArea : MonoBehaviour
 
     private IEnumerator TimerCoroutine()
     {
-        while (_isTiming && _customersManager.NextCustomer != null && sportsAreaManager.IsAvailableSportMachine()) // await sportarea available
+        while (_isTiming && _customersManager.NextCustomer != null && _sportsAreaManager.IsAvailableSportMachine()) // await sportarea available
         {
             if (!_customersManager.NextCustomer.IsMoving)
             {
@@ -31,6 +32,7 @@ public class CustomerWaitArea : MonoBehaviour
                 {
                     _timer = 0f;
                     _customersManager.CheckOut();
+                    _moneyStackManager.AddMoney(20);
                 }
 
                 _passingTimeImage.fillAmount = _timer / _waitingTime;

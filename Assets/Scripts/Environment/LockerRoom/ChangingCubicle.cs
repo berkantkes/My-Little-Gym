@@ -8,6 +8,7 @@ public class ChangingCubicle : MonoBehaviour
 {
     [SerializeField] private Image _passingTimeImage;
     [SerializeField] private float _waitingTime = 5;
+    [SerializeField] private MoneyStackManager _moneyStackManager;
 
     private float _timer;
     private bool _isTiming;
@@ -15,7 +16,6 @@ public class ChangingCubicle : MonoBehaviour
     private Queue<CustomerController> _customerQueue = new Queue<CustomerController>();
     public bool IsActive => gameObject.activeInHierarchy;
     public int CustomerCount => _customerQueue.Count;
-
 
     public void AddCustomerQueue(CustomerController customer)
     {
@@ -29,6 +29,9 @@ public class ChangingCubicle : MonoBehaviour
 
         foreach (var customer in _customerQueue)
         {
+            if (index == 0)
+                customer.SetEnterLockerRoom(true);
+
             customer.SetTarget(transform.position + new Vector3(0, 0, index * -2f));
             index++;
         }
@@ -52,6 +55,7 @@ public class ChangingCubicle : MonoBehaviour
                 {
                     _timer = 0f;
                     ExitCustomer();
+                    StopTiming();
                 }
 
                 _passingTimeImage.fillAmount = _timer / _waitingTime;
@@ -70,6 +74,7 @@ public class ChangingCubicle : MonoBehaviour
     {
         CustomerController customer = _customerQueue.Dequeue();
         customer.SetExitLockerRoom(true);
-        PositionCustomerInQueue();
+        PositionCustomerInQueue(); 
+        _moneyStackManager.AddMoney(20);
     }
 }

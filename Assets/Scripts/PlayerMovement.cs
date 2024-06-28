@@ -6,6 +6,7 @@ public class PlayerMovement : MonoBehaviour
 {
     [SerializeField] private DynamicJoystick _dynamicJoystick;
     [SerializeField] private float _movementSpeed;
+    [SerializeField] private Animator _animator;
 
     private UIManager _uiManager;
     private Rigidbody _playerRigidbody;
@@ -17,6 +18,7 @@ public class PlayerMovement : MonoBehaviour
     private int _slowDownFactor = 50;
     private bool isInMoneyPayTriggerArea = false;
     private bool _spendMoney = false;
+    private bool _wasMoving;
 
     public void Initialize(UIManager uiManager, CustomersManager customersManager)
     {
@@ -28,7 +30,8 @@ public class PlayerMovement : MonoBehaviour
 
     private void Update()
     {
-        GetMovementInputs();
+        GetMovementInputs();  
+        UpdateAnimation();
     }
 
     private void FixedUpdate()
@@ -50,6 +53,10 @@ public class PlayerMovement : MonoBehaviour
         {
             other.GetComponent<CustomerWaitArea>().PassingTime();
         }
+        if (other.GetComponent<SportMachineController>() != null)
+        {
+            other.GetComponent<SportMachineController>().PassingCleanMachineTime();
+        }
     }
 
     private void OnTriggerExit(Collider other)
@@ -62,6 +69,10 @@ public class PlayerMovement : MonoBehaviour
         if (other.GetComponent<CustomerWaitArea>() != null)
         {
             other.GetComponent<CustomerWaitArea>().StopTiming();
+        }
+        if (other.GetComponent<SportMachineController>() != null)
+        {
+            other.GetComponent<SportMachineController>().StopCleanMachineTiming();
         }
     }
 
@@ -118,6 +129,13 @@ public class PlayerMovement : MonoBehaviour
         if (_playerRigidbody != null)
         {
             _playerRigidbody.velocity = new Vector3(_horizontal, _playerRigidbody.velocity.y, _vertical) * _movementSpeed * Time.fixedDeltaTime;
+
+            Vector3 movement = new Vector3(_horizontal, 0, _vertical) * _movementSpeed * Time.fixedDeltaTime;
+
+            if (movement != Vector3.zero)
+            {
+                transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(-movement), 0.15f);
+            }
         }
     }
 
@@ -125,5 +143,24 @@ public class PlayerMovement : MonoBehaviour
     {
         _horizontal = _dynamicJoystick.Horizontal;
         _vertical = _dynamicJoystick.Vertical;
+    }
+
+    private void UpdateAnimation()
+    {
+        bool isMoving = _horizontal != 0 || _vertical != 0;
+
+        if (_animator != null)
+        {
+            if (isMoving && !_wasMoving)
+            {
+                _animator.SetTrigger("Walk");
+            }
+            else if (!isMoving && _wasMoving)
+            {
+                _animator.SetTrigger("Idle");
+            }
+        }
+
+        _wasMoving = isMoving;
     }
 }

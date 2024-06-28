@@ -8,7 +8,9 @@ public class GameController : MonoBehaviour
     [SerializeField] private PlayerMovement _playerMovement;
     [SerializeField] private AllEnvironmentManager _allEnvironmentManager;
     [SerializeField] private MoneyStackManager _moneyStackManager;
+    [SerializeField] private MoneyStackManager _moneyStackManager2;
     [SerializeField] private CustomersManager _customersManager;
+    [SerializeField] private WCManager _wcManager;
 
     private void Start()
     {
@@ -16,13 +18,15 @@ public class GameController : MonoBehaviour
 
         Application.targetFrameRate = 60;
 
-        PlayerPrefsHelper.SetInt(PlayerPrefsHelper.MoneyKey, 0);
+        PlayerPrefsHelper.SetInt(PlayerPrefsHelper.MoneyKey, 5000);
 
         _uiManager.Initialize();
         _playerMovement.Initialize(_uiManager, _customersManager);
         _allEnvironmentManager.Initialize();
         _moneyStackManager.Initialize(_uiManager);
+        _moneyStackManager2.Initialize(_uiManager);
         _customersManager.Initialize();
+        _wcManager.Initialize();
 
     }
 }

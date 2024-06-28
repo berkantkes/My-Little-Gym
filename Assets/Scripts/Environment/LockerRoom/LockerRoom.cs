@@ -17,12 +17,10 @@ public class LockerRoom : MonoBehaviour
         {
             //targetCubicle.AddCustomerQueue(customer);
             return targetCubicle;
-            Debug.Log("Customer added to cubicle with least queue.");
         }
         else
         {
             return null;
-            Debug.Log("No active cubicle available.");
         }
 
     }

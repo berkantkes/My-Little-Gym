@@ -14,6 +14,10 @@ public enum EnvironmentType
     ChangingCubicle5,
     ChangingCubicle6,
     RunningMachine1,
+    RunningMachine2,
+    RunningMachine3,
+    RunningMachine4,
+    WC1,
 }
 
 [System.Serializable]

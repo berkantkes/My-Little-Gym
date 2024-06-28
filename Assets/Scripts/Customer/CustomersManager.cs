@@ -13,6 +13,7 @@ public class CustomersManager : MonoBehaviour
     [SerializeField] private float _spawnInterval = 3f;
     [SerializeField] private LockerRoom _lockerRoom;
     [SerializeField] private SportsAreaManager _sportsAreaManager;
+    [SerializeField] private WCManager _wcManager;
 
     private Queue<CustomerController> _customerPool = new Queue<CustomerController>();
     private Queue<CustomerController> _customerQueue = new Queue<CustomerController>();
@@ -32,6 +33,7 @@ public class CustomersManager : MonoBehaviour
         {
             GameObject customerObj = Instantiate(_customerPrefab, new Vector3(0, 0, -20), Quaternion.identity, transform);
             CustomerController customer = customerObj.GetComponent<CustomerController>();
+            customer.Initialize(this);
             customerObj.SetActive(false);
             _customerPool.Enqueue(customer);
         }
@@ -55,7 +57,7 @@ public class CustomersManager : MonoBehaviour
         {
             CustomerController customer = _customerPool.Dequeue();
             _customerQueue.Enqueue(customer);
-            customer.gameObject.SetActive(true);
+            customer.CustomerActivate();
             PositionCustomerInQueue();
         }
     }
@@ -76,15 +78,18 @@ public class CustomersManager : MonoBehaviour
         if (_customerQueue.Count > 0)
         {
             CustomerController customer = _customerQueue.Dequeue();
-            _lockerRoom.GoLockerRoom().AddCustomerQueue(customer);
-            customer.MoveToTargets(_sportsAreaManager.GetAvailableMachine(customer).transform);
+            ChangingCubicle changingCubicle = _lockerRoom.GoLockerRoom();
+            //changingCubicle.AddCustomerQueue(customer);
+            customer.MoveToTargets(_sportsAreaManager.GetAvailableMachine(customer), changingCubicle, _wcManager);
             PositionCustomerInQueue();
             //Customer money
         }
     }
 
-    public void ExitCustomer()
+    public void ExitCustomer(CustomerController customer)
     {
-
+        _customerPool.Enqueue(customer);
+        customer.gameObject.SetActive(false);
+        customer.transform.position = new Vector3(0, 0, -20);
     }
 }
