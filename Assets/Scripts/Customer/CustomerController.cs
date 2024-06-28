@@ -121,16 +121,23 @@ public class CustomerController : MonoBehaviour
 
     private void RotateTowardsMovementDirection()
     {
-        if (_navMeshAgent.velocity.sqrMagnitude > 0.1f)
+        if (_navMeshAgent.remainingDistance > _navMeshAgent.stoppingDistance)
         {
-            Vector3 direction = _navMeshAgent.steeringTarget - transform.position;
-            direction.y = 0; // Y eksenindeki dönüþü engelle
-            if (direction.sqrMagnitude > 0.1f)
-            {
-                Quaternion targetRotation = Quaternion.LookRotation(-direction);
-                transform.rotation = Quaternion.Lerp(transform.rotation, targetRotation, _rotationSpeed * Time.deltaTime);
-            }
+            // Obje hareket ediyorsa, gittiði yöne doðru döndür
+            Vector3 direction = _navMeshAgent.velocity.normalized;
+            Quaternion lookRotation = Quaternion.LookRotation(-direction);
+            transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, Time.deltaTime * 5f);
         }
+        //if (_navMeshAgent.velocity.sqrMagnitude > 0.1f)
+        //{
+        //    Vector3 direction = _navMeshAgent.steeringTarget - transform.position;
+        //    direction.y = 0;
+        //    if (direction.sqrMagnitude > 0.1f)
+        //    {
+        //        Quaternion targetRotation = Quaternion.LookRotation(-direction);
+        //        transform.rotation = Quaternion.Lerp(transform.rotation, targetRotation, _rotationSpeed * Time.deltaTime);
+        //    }
+        //}
     }
 
 

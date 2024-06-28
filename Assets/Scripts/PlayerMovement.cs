@@ -19,6 +19,7 @@ public class PlayerMovement : MonoBehaviour
     private bool isInMoneyPayTriggerArea = false;
     private bool _spendMoney = false;
     private bool _wasMoving;
+    private Collider _currentTrigger;
 
     public void Initialize(UIManager uiManager, CustomersManager customersManager)
     {
@@ -31,7 +32,12 @@ public class PlayerMovement : MonoBehaviour
     private void Update()
     {
         GetMovementInputs();  
-        UpdateAnimation();
+        UpdateAnimation(); 
+        if (_currentTrigger != null && !_currentTrigger.gameObject.activeSelf)
+        {
+            // OnTriggerExit manuel olarak çaðrýlýr
+            OnTriggerExit(_currentTrigger);
+        }
     }
 
     private void FixedUpdate()
@@ -43,18 +49,23 @@ public class PlayerMovement : MonoBehaviour
     {
         if (other.GetComponent<MoneyPayAreaController>() != null)
         {
+            _currentTrigger = other;
+            Debug.Log("MoneyPayAreaControllerSTART");
             isInMoneyPayTriggerArea = true;
         }
         if (other.GetComponent<MoneyStackManager>() != null)
         {
+            _currentTrigger = other;
             other.GetComponent<MoneyStackManager>().CollectMoney();
         }
         if (other.GetComponent<CustomerWaitArea>() != null)
         {
+            _currentTrigger = other;
             other.GetComponent<CustomerWaitArea>().PassingTime();
         }
         if (other.GetComponent<SportMachineController>() != null)
         {
+            _currentTrigger = other;
             other.GetComponent<SportMachineController>().PassingCleanMachineTime();
         }
     }
@@ -63,15 +74,19 @@ public class PlayerMovement : MonoBehaviour
     {
         if (other.GetComponent<MoneyPayAreaController>() != null)
         {
+            _currentTrigger = null;
+            Debug.Log("MoneyPayAreaControllerEXIT");
             isInMoneyPayTriggerArea = false;
             _spendMoney = false;
         }
         if (other.GetComponent<CustomerWaitArea>() != null)
         {
+            _currentTrigger = null;
             other.GetComponent<CustomerWaitArea>().StopTiming();
         }
         if (other.GetComponent<SportMachineController>() != null)
         {
+            _currentTrigger = null;
             other.GetComponent<SportMachineController>().StopCleanMachineTiming();
         }
     }

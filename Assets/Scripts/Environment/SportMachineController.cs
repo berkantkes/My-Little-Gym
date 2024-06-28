@@ -30,7 +30,7 @@ public class SportMachineController : MonoBehaviour
     public void PassingUseMachineTime()
     {
         _customer.SetNavMesh(false);
-        _customer.transform.position = transform.position + new Vector3(0, 5, 0);
+        _customer.transform.position = transform.position + new Vector3(0, .3f, -1);
         _isUseMachineTiming = true;
         StartCoroutine(UseMachineTimerCoroutine());
     }
