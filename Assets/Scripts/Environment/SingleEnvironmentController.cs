@@ -4,13 +4,14 @@ using UnityEngine;
 
 public class SingleEnvironmentController : MonoBehaviour
 {
-    [SerializeField] private MoneyPayAreaController _moneyArea;
-    [SerializeField] private GameObject _environmentObject;
-    [SerializeField] private List<SingleEnvironmentController> _willBeOpenEnvironmentObjects;
+    [SerializeField] protected MoneyPayAreaController _moneyArea;
+    [SerializeField] protected GameObject _environmentObject;
+    [SerializeField] protected List<SingleEnvironmentController> _willBeOpenEnvironmentObjects;
     [SerializeField] private EnvironmentType _environmentType;
+    [SerializeField] private EnvironmentAbstract _environmentAbstract;
 
-    private AllEnvironmentManager _allEnvironmentManager;
-    private EnvironmentData _environmentData;
+    protected AllEnvironmentManager _allEnvironmentManager;
+    protected EnvironmentData _environmentData;
 
     public EnvironmentType EnvironmentType => _environmentType;
     public int CurrentPrice => _moneyArea.CurrentPrice;
@@ -23,16 +24,16 @@ public class SingleEnvironmentController : MonoBehaviour
         _allEnvironmentManager.UpdateEnvironmentDataList();
     }
 
-    public void SetEnvironmentData(EnvironmentData environmentData, AllEnvironmentManager allEnvironmentManager)
+    public virtual void SetEnvironmentData(EnvironmentData environmentData, AllEnvironmentManager allEnvironmentManager)
     {
         _environmentData = environmentData;
         _allEnvironmentManager = allEnvironmentManager;
         ProcessEnvironmentData();
     }
 
-    private void ProcessEnvironmentData()
+    protected virtual void ProcessEnvironmentData()
     {
-        if(_environmentData.isOpen)
+        if (_environmentData.isOpen)
         {
             gameObject.SetActive(true);
             if (!_environmentData.isPaid)
@@ -42,6 +43,7 @@ public class SingleEnvironmentController : MonoBehaviour
             _moneyArea.gameObject.SetActive(!_environmentData.isPaid);
             _environmentObject.gameObject.SetActive(_environmentData.isPaid);
             _moneyArea.SetCurrentPrice(_environmentData.currentPrice);
+            SetLevelObject();
         }
     }
 
@@ -51,11 +53,12 @@ public class SingleEnvironmentController : MonoBehaviour
         _allEnvironmentManager.UpdateEnvironmentDataList();
     }
 
-    public void PaidArea()
+    public virtual void PaidArea()
     {
         _moneyArea.gameObject.SetActive(false);
         _environmentObject.gameObject.SetActive(true);
         _environmentData.isPaid = true;
+        UpLevel();
 
         foreach (var env in _willBeOpenEnvironmentObjects)
         {
@@ -68,8 +71,19 @@ public class SingleEnvironmentController : MonoBehaviour
     {
         if (_environmentData == null)
         {
-            _environmentData = new EnvironmentData(_environmentType, false, false, 0);
+            _environmentData = new EnvironmentData(_environmentType, false, false, 0, 0);
         }
         return _environmentData;
+    }
+
+    public void UpLevel()
+    {
+        _environmentData.level++;
+        SetLevelObject();
+    }
+    public void SetLevelObject()
+    {
+        if (_environmentAbstract != null )
+            _environmentAbstract.SetLevelObject(_environmentData.level);
     }
 }

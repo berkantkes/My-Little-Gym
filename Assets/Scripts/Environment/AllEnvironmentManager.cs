@@ -37,12 +37,12 @@ public class AllEnvironmentManager : MonoBehaviour
         {
             if (controller.EnvironmentType == EnvironmentType.SalesTable)
             {
-                EnvironmentData salesTableData = new EnvironmentData(controller.EnvironmentType, true, false, controller.CurrentPrice);
+                EnvironmentData salesTableData = new EnvironmentData(controller.EnvironmentType, true, false, controller.CurrentPrice, 1);
                 initialDataList.Add(salesTableData);
                 continue;
             }
 
-            EnvironmentData data = new EnvironmentData(controller.EnvironmentType, false, false, controller.CurrentPrice);
+            EnvironmentData data = new EnvironmentData(controller.EnvironmentType, false, false, controller.CurrentPrice, 0);
             initialDataList.Add(data);
         }
 

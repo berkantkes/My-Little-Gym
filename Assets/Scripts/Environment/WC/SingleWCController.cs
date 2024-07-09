@@ -8,7 +8,7 @@ public class SingleWCController : MonoBehaviour
     private ThreeWCController _threeWCController;
     private CustomerController _customer;
 
-    private float _waitingTime = 15;
+    private float _waitingTime = 5;
     private float _timer;
     private bool _isTiming;
     private bool _isAvailable = true;

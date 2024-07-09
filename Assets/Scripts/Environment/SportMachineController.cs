@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class SportMachineController : MonoBehaviour
+public class SportMachineController : EnvironmentAbstract
 {
     [SerializeField] private Image _passingTimeImage;
     [SerializeField] private float _waitingTime = 5;
@@ -17,7 +17,6 @@ public class SportMachineController : MonoBehaviour
     private bool _isClean = true;
 
     public bool IsActive => gameObject.activeInHierarchy;
-    //public bool IsAvailable => gameObject.activeSelf;
 
     public bool IsAvailable => _isAvailable;
 
@@ -31,6 +30,7 @@ public class SportMachineController : MonoBehaviour
     {
         _customer.SetNavMesh(false);
         _customer.transform.position = transform.position + new Vector3(0, .3f, -1);
+        _customer.transform.rotation = Quaternion.identity;
         _isUseMachineTiming = true;
         StartCoroutine(UseMachineTimerCoroutine());
     }

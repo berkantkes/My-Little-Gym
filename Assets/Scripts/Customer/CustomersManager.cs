@@ -31,7 +31,7 @@ public class CustomersManager : MonoBehaviour
     {
         for (int i = 0; i < _initialCustomerCount; i++)
         {
-            GameObject customerObj = Instantiate(_customerPrefab, new Vector3(0, 0, -20), Quaternion.identity, transform);
+            GameObject customerObj = Instantiate(_customerPrefab, new Vector3(0, 0, -45), Quaternion.identity, transform);
             CustomerController customer = customerObj.GetComponent<CustomerController>();
             customer.Initialize(this);
             customerObj.SetActive(false);
@@ -68,7 +68,7 @@ public class CustomersManager : MonoBehaviour
 
         foreach (var customer in _customerQueue)
         {
-            customer.SetTarget(_waitingArea.position + new Vector3(0, 0, (index * -2f) - 3f));
+            customer.SetTarget(_waitingArea.position + new Vector3(0, 0, (index * -4f) - 5f));
             index++;
         }
     }
