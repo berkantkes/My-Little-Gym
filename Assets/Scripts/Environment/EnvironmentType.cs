@@ -13,17 +13,20 @@ public enum EnvironmentType
     ChangingCubicle4,
     ChangingCubicle5,
     ChangingCubicle6,
+    RunningArea,
     RunningMachine1,
     RunningMachine2,
     RunningMachine3,
     RunningMachine4,
     WC1,
     RunningLevelUp,
+    BenchArea,
     BenchPressLevelUp,
     BenchPress1,
     BenchPress2,
     BenchPress3,
     BenchPress4,
+    Cleaner1,
 }
 
 [System.Serializable]

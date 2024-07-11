@@ -50,7 +50,6 @@ public class PlayerMovement : MonoBehaviour
         if (other.GetComponent<MoneyPayAreaController>() != null)
         {
             _currentTrigger = other;
-            Debug.Log("MoneyPayAreaControllerSTART");
             isInMoneyPayTriggerArea = true;
         }
         if (other.GetComponent<MoneyStackManager>() != null)
@@ -75,7 +74,6 @@ public class PlayerMovement : MonoBehaviour
         if (other.GetComponent<MoneyPayAreaController>() != null)
         {
             _currentTrigger = null;
-            Debug.Log("MoneyPayAreaControllerEXIT");
             isInMoneyPayTriggerArea = false;
             _spendMoney = false;
         }
@@ -156,8 +154,12 @@ public class PlayerMovement : MonoBehaviour
 
     private void GetMovementInputs()
     {
-        _horizontal = _dynamicJoystick.Horizontal;
-        _vertical = _dynamicJoystick.Vertical;
+        //_horizontal = _dynamicJoystick.Horizontal;
+        //_vertical = _dynamicJoystick.Vertical;
+
+        Vector2 input = new Vector2(_dynamicJoystick.Horizontal, _dynamicJoystick.Vertical).normalized;
+        _horizontal = input.x;
+        _vertical = input.y;
     }
 
     private void UpdateAnimation()

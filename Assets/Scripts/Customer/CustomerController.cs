@@ -31,7 +31,11 @@ public class CustomerController : MonoBehaviour
             _isMoving = moving;
             OnMovementStateChanged(_isMoving);
         }
-        RotateTowardsMovementDirection();
+
+        if (_isMoving)
+        {
+            RotateTowardsMovementDirection();
+        }
     }
 
     private void OnMovementStateChanged(bool isMoving)
@@ -95,7 +99,7 @@ public class CustomerController : MonoBehaviour
     public async void MoveToTargets(SportMachineController sportMachine, ChangingCubicle changingCubicle, WCManager wCManager)
     {
         _customerStatus = CustomerStatus.SportRunArea;
-        SetTarget(sportMachine.transform.position);
+        SetTarget(sportMachine.Target.position);
 
         await UniTask.WaitUntil(() => CheckIfReachedTarget());
         sportMachine.PassingUseMachineTime();
@@ -126,37 +130,16 @@ public class CustomerController : MonoBehaviour
 
     private void RotateTowardsMovementDirection()
     {
-        //if (_navMeshAgent.remainingDistance > _navMeshAgent.stoppingDistance)
-        //{
-        //    // Obje hareket ediyorsa, gittiði yöne doðru döndür
-        //    Vector3 direction = _navMeshAgent.velocity.normalized;
-        //    Quaternion lookRotation = Quaternion.LookRotation(-direction);
-        //    transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, Time.deltaTime * 5f);
-        //}
-        //if (_navMeshAgent.velocity.sqrMagnitude > 0.1f)
-        //{
-        //    Vector3 direction = _navMeshAgent.steeringTarget - transform.position;
-        //    direction.y = 0;
-        //    if (direction.sqrMagnitude > 0.1f)
-        //    {
-        //        Quaternion targetRotation = Quaternion.LookRotation(-direction);
-        //        transform.rotation = Quaternion.Lerp(transform.rotation, targetRotation, _rotationSpeed * Time.deltaTime);
-        //    }
-        //}
-
         Vector3 currentPosition = transform.position;
 
-        // Önceki konumdan güncel konuma olan yön vektörünü hesapla
         Vector3 direction = currentPosition - previousPosition;
 
         if (direction != Vector3.zero)
         {
-            // Bu yönün tersine doðru bakmak için döndürme hesapla
             Quaternion lookRotation = Quaternion.LookRotation(direction);
             transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, Time.deltaTime * 5f);
         }
 
-        // Önceki konumu güncelle
         previousPosition = currentPosition;
     }
 

@@ -39,4 +39,12 @@ public class SportsAreaManager : MonoBehaviour
         return availableMachines.Count != 0;
     }
 
+    public List<SportMachineController> GetUncleanMachines()
+    {
+        var uncleanMachines = _sportMachineControllers
+            .Where(machine => !machine.IsClean)
+            .ToList();
+
+        return uncleanMachines;
+    }
 }

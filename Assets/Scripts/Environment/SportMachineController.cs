@@ -7,6 +7,7 @@ public class SportMachineController : EnvironmentAbstract
 {
     [SerializeField] private Image _passingTimeImage;
     [SerializeField] private float _waitingTime = 5;
+    [SerializeField] private Transform _target;
 
     private CustomerController _customer;
     private float _useMachinetimer;
@@ -16,9 +17,12 @@ public class SportMachineController : EnvironmentAbstract
     private bool _isCleanMachineTiming;
     private bool _isClean = true;
 
+    public Transform Target => _target;
+
     public bool IsActive => gameObject.activeInHierarchy;
 
     public bool IsAvailable => _isAvailable;
+    public bool IsClean => _isClean;
 
     public void SetCustomerToMachine(CustomerController customer)
     {
@@ -29,7 +33,7 @@ public class SportMachineController : EnvironmentAbstract
     public void PassingUseMachineTime()
     {
         _customer.SetNavMesh(false);
-        _customer.transform.position = transform.position + new Vector3(0, .3f, -1);
+        _customer.transform.position = transform.position + new Vector3(-.5f, .3f, -1); // target position + y
         _customer.transform.rotation = Quaternion.identity;
         _isUseMachineTiming = true;
         StartCoroutine(UseMachineTimerCoroutine());
@@ -89,7 +93,7 @@ public class SportMachineController : EnvironmentAbstract
     {
         _isClean = false;
         _customer.SetExitSportMachine(true);
-        _customer.transform.position = transform.position + new Vector3(2, 0, 0);
+        _customer.transform.position = transform.position + new Vector3(2, 0, 0); // target position + y
         _customer.SetNavMesh(true);
     }
     private void SetCleanMachine()
