@@ -9,13 +9,11 @@ public class LockerRoom : MonoBehaviour
     public ChangingCubicle GoLockerRoom() //CustomerController customer
     {
         var targetCubicle = _cubicles
-            .Where(cubicle => cubicle.IsActive)
-            .OrderBy(cubicle => cubicle.CustomerCount)
+            .Where(cubicle => cubicle.IsActive && cubicle.IsAvailable())
             .FirstOrDefault();
 
         if (targetCubicle != null)
         {
-            //targetCubicle.AddCustomerQueue(customer);
             return targetCubicle;
         }
         else

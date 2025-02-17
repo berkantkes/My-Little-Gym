@@ -10,7 +10,7 @@ public class MoneyPayAreaController : MonoBehaviour
     [SerializeField] private TextMeshProUGUI _priceText;
     [SerializeField] private Image _fillImage;
 
-    private SingleEnvironmentController _singleEnvironmentController;
+    protected SingleEnvironmentController _singleEnvironmentController;
     private int _defaultPrice;
     private int _currentPrice = 200;
     public int CurrentPrice => _currentPrice;
@@ -50,7 +50,7 @@ public class MoneyPayAreaController : MonoBehaviour
         _singleEnvironmentController.ChangeCurrentPrice();
     }
 
-    public void PaidArea()
+    public virtual void PaidArea()
     {
         _singleEnvironmentController.PaidArea();
     }

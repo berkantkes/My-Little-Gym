@@ -30,7 +30,7 @@ public class LevelUpEnvironmentController : SingleEnvironmentController
                 _moneyArea.Initialize(this);
             }
             //_moneyArea.gameObject.SetActive(!_environmentData.isPaid);
-            //_environmentObject.gameObject.SetActive(_environmentData.isPaid);
+            //_openEnvironmentObject.gameObject.SetActive(_environmentData.isPaid);
             _moneyArea.SetCurrentPrice(_environmentData.currentPrice);
         }
     }

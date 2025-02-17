@@ -10,31 +10,21 @@ public class ChangingCubicle : MonoBehaviour
     [SerializeField] private float _waitingTime = 5;
     [SerializeField] private MoneyStackManager _moneyStackManager;
 
+    private CustomerController _currentCustomer;
     private float _timer;
     private bool _isTiming;
-
-    private Queue<CustomerController> _customerQueue = new Queue<CustomerController>();
     public bool IsActive => gameObject.activeInHierarchy;
-    public int CustomerCount => _customerQueue.Count;
 
-    public void AddCustomerQueue(CustomerController customer)
+    public void SetCustomer(CustomerController customer)
     {
-        _customerQueue.Enqueue(customer);
-        PositionCustomerInQueue();
+        _currentCustomer = customer;
+        CallCustomer();
     }
 
-    private void PositionCustomerInQueue()
+    private void CallCustomer()
     {
-        int index = 0;
-
-        foreach (var customer in _customerQueue)
-        {
-            if (index == 0)
-                customer.SetEnterLockerRoom(true);
-
-            customer.SetTarget(transform.position + new Vector3(0, 0, index * -2f));
-            index++;
-        }
+        _currentCustomer.SetTarget(transform.position);
+        _currentCustomer.SetEnterLockerRoom(true);
     }
 
     public void PassingTime()
@@ -45,9 +35,9 @@ public class ChangingCubicle : MonoBehaviour
 
     private IEnumerator TimerCoroutine()
     {
-        while (_isTiming && _customerQueue.Count > 0)
+        while (_isTiming && _currentCustomer != null)
         {
-            if (!_customerQueue.Peek().IsMoving)
+            if (!_currentCustomer.IsMoving)
             {
                 _timer += Time.deltaTime;
                 
@@ -72,9 +62,14 @@ public class ChangingCubicle : MonoBehaviour
 
     private void ExitCustomer()
     {
-        CustomerController customer = _customerQueue.Dequeue();
-        customer.SetExitLockerRoom(true);
-        PositionCustomerInQueue(); 
+        _currentCustomer.SetExitLockerRoom(true);
+        _currentCustomer = null;
         _moneyStackManager.AddMoney(20);
     }
+
+    public bool IsAvailable()
+    {
+        return _currentCustomer != null;
+    }
+
 }

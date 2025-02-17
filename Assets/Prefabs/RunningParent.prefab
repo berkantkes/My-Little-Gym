@@ -58,7 +58,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -3.05, y: 0, z: 0}
-  m_LocalScale: {x: 0.8, y: 0.8, z: 0.8}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 7835681369210043100}
@@ -78,7 +78,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _moneyArea: {fileID: 478304739980440599}
-  _environmentObject: {fileID: 4028089340492882949}
+  _openEnvironmentObject:
+  - {fileID: 4028089340492882949}
+  _closeEnvironmentObject: []
   _willBeOpenEnvironmentObjects:
   - {fileID: 0}
   _environmentType: 12
@@ -139,6 +141,7 @@ MonoBehaviour:
   _passingTimeImage: {fileID: 8630362900040402739}
   _waitingTime: 5
   _target: {fileID: 741080063637359217}
+  _customerStatus: 1
 --- !u!65 &8420163105218983826
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -322,6 +325,7 @@ MonoBehaviour:
   _passingTimeImage: {fileID: 8630362900040402739}
   _waitingTime: 5
   _target: {fileID: 0}
+  _customerStatus: 0
 --- !u!1001 &3874700701249797518
 PrefabInstance:
   m_ObjectHideFlags: 0

@@ -1,5 +1,7 @@
+using Cysharp.Threading.Tasks;
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -13,6 +15,12 @@ public class CustomerWaitArea : MonoBehaviour
 
     private float _timer;
     private bool _isTiming;
+    private bool _cashier;
+
+    private void OnEnable()
+    {
+        SetCashierAsync();
+    }
 
     public void PassingTime()
     {
@@ -22,7 +30,7 @@ public class CustomerWaitArea : MonoBehaviour
 
     private IEnumerator TimerCoroutine()
     {
-        while (_isTiming && _customersManager.NextCustomer != null && _sportsAreaManager.IsAvailableSportMachine()) // await sportarea available
+        while (_isTiming && !PlayerPrefsHelper.GetBool(PlayerPrefsHelper.Cashier) && _customersManager.NextCustomer != null) // await sportarea available
         {
             if (!_customersManager.NextCustomer.IsMoving)
             {
@@ -45,6 +53,29 @@ public class CustomerWaitArea : MonoBehaviour
     public void StopTiming()
     {
         _isTiming = false;
+    }
+
+    public async Task SetCashierAsync()
+    {
+        while (PlayerPrefsHelper.GetBool(PlayerPrefsHelper.Cashier)) // await sportarea available
+        {
+            await UniTask.WaitUntil(() => _sportsAreaManager.IsAvailableSportMachine());
+            await UniTask.WaitUntil(() => _customersManager.NextCustomer != null);
+
+            if (!_customersManager.NextCustomer.IsMoving)
+            {
+                _timer += Time.deltaTime;
+
+                if (_timer >= _waitingTime)
+                {
+                    _timer = 0f;
+                    _customersManager.CheckOut();
+                    _moneyStackManager.AddMoney(20);
+                }
+
+                _passingTimeImage.fillAmount = _timer / _waitingTime;
+            }
+        }
     }
 
 }

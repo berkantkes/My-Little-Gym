@@ -6,6 +6,7 @@ public static class PlayerPrefsHelper
 {
     public static string MoneyKey = "Money";
     public const string IntListKey = "IntListKey";
+    public const string Cashier = "Cashier";
 
     public static bool HasKey(string key)
     {
@@ -53,6 +54,18 @@ public static class PlayerPrefsHelper
     public static void DeleteAll()
     {
         PlayerPrefs.DeleteAll();
+    }
+
+    public static bool GetBool(string key, bool defaultValue = false)
+    {
+        int defaultIntValue = defaultValue ? 1 : 0;
+        return PlayerPrefs.GetInt(key, defaultIntValue) == 1;
+    }
+
+    public static void SetBool(string key, bool value)
+    {
+        PlayerPrefs.SetInt(key, value ? 1 : 0);
+        PlayerPrefs.Save();
     }
 
     public const string EnvironmentDataKey = "EnvironmentData";

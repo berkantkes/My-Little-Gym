@@ -24,7 +24,7 @@ public class WCManager : MonoBehaviour
 
         if (targetWC != null)
         {
-            //targetWC.AddCustomerQueue(customer);
+            //targetWC.SetCustomer(customer);
             return targetWC;
         }
         else

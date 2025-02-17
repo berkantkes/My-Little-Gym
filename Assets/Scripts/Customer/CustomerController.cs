@@ -56,8 +56,12 @@ public class CustomerController : MonoBehaviour
                     _animator.SetTrigger("Run");
                     Debug.Log("Run");
                     break;
+                case CustomerStatus.BackSquatArea:
+                    _animator.SetTrigger("BackSquat");
+                    Debug.Log("BackSquat");
+                    break;
                 case CustomerStatus.WcArea:
-                    _animator.SetTrigger("wc");
+                    _animator.SetTrigger("Sit");
                     Debug.Log("Sitting");
                     break;
                 case CustomerStatus.LockerRoomArea:
@@ -96,7 +100,7 @@ public class CustomerController : MonoBehaviour
         _navMeshAgent.SetDestination(target);
     }
 
-    public async void MoveToTargets(SportMachineController sportMachine, ChangingCubicle changingCubicle, WCManager wCManager)
+    public async void MoveToTargets(SportMachineController sportMachine, LockerRoom lockerRoom, WCManager wCManager)
     {
         _customerStatus = CustomerStatus.SportRunArea;
         SetTarget(sportMachine.Target.position);
@@ -107,20 +111,26 @@ public class CustomerController : MonoBehaviour
 
         bool shouldWaitWC = Random.value <= 1f;
         ThreeWCController threeWCController = wCManager.GetAvailableWCWC();
+
+        bool shouldGoLockerRoom = Random.value <= 1f;
+        ChangingCubicle changingCubicle = lockerRoom.GoLockerRoom();
+
         if (shouldWaitWC && threeWCController != null)
         {
             _customerStatus = CustomerStatus.WcArea;
             threeWCController.AddCustomerQueue(this);
             await UniTask.WaitUntil(() => _isExitWC);
         }
+        else if (shouldWaitWC && changingCubicle != null)
+        {
+            changingCubicle.SetCustomer(this);
 
-        changingCubicle.AddCustomerQueue(this);
+            await UniTask.WaitUntil(() => _isEnterLockerRoom && CheckIfReachedTarget());
+            changingCubicle.PassingTime();
+            _customerStatus = CustomerStatus.LockerRoomArea;
 
-        await UniTask.WaitUntil(() => _isEnterLockerRoom && CheckIfReachedTarget());
-        changingCubicle.PassingTime();
-        _customerStatus = CustomerStatus.LockerRoomArea;
-
-        await UniTask.WaitUntil(() => _isExitLockerRoom);
+            await UniTask.WaitUntil(() => _isExitLockerRoom);
+        }
 
         SetTarget(new Vector3(-20, .1f, -20)); // exit area
 
@@ -188,6 +198,7 @@ public enum CustomerStatus
 {
     WaitingArea,
     SportRunArea,
+    BackSquatArea,
     WcArea,
     LockerRoomArea
 }

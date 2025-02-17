@@ -71,7 +71,7 @@ public class SingleWCController : MonoBehaviour
     //{
     //    CustomerController customer = _customerQueue.Dequeue();
     //    customer.SetExitLockerRoom(true);
-    //    PositionCustomerInQueue();
+    //    CallCustomer();
     //    _moneyStackManager.AddMoney(20);
     //}
 }

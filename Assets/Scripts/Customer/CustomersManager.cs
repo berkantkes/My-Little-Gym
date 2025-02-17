@@ -78,9 +78,7 @@ public class CustomersManager : MonoBehaviour
         if (_customerQueue.Count > 0)
         {
             CustomerController customer = _customerQueue.Dequeue();
-            ChangingCubicle changingCubicle = _lockerRoom.GoLockerRoom();
-            //changingCubicle.AddCustomerQueue(customer);
-            customer.MoveToTargets(_sportsAreaManager.GetAvailableMachine(customer), changingCubicle, _wcManager);
+            customer.MoveToTargets(_sportsAreaManager.GetAvailableMachine(customer), _lockerRoom, _wcManager);
             PositionCustomerInQueue();
             //Customer money
         }

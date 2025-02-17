@@ -27,6 +27,7 @@ public enum EnvironmentType
     BenchPress3,
     BenchPress4,
     Cleaner1,
+    Cashier,
 }
 
 [System.Serializable]

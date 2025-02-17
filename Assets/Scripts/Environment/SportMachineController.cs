@@ -8,6 +8,7 @@ public class SportMachineController : EnvironmentAbstract
     [SerializeField] private Image _passingTimeImage;
     [SerializeField] private float _waitingTime = 5;
     [SerializeField] private Transform _target;
+    [SerializeField] private CustomerStatus _customerStatus;
 
     private CustomerController _customer;
     private float _useMachinetimer;
@@ -100,6 +101,11 @@ public class SportMachineController : EnvironmentAbstract
     {
         _isClean = true;
         _isAvailable = true;
+    }
+
+    public CustomerStatus GetCustomerStatus()
+    {
+        return _customerStatus;
     }
 
 }

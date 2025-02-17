@@ -5,7 +5,8 @@ using UnityEngine;
 public class SingleEnvironmentController : MonoBehaviour
 {
     [SerializeField] protected MoneyPayAreaController _moneyArea;
-    [SerializeField] protected GameObject _environmentObject;
+    [SerializeField] protected List<GameObject> _openEnvironmentObject;
+    [SerializeField] protected List<GameObject> _closeEnvironmentObject;
     [SerializeField] protected List<SingleEnvironmentController> _willBeOpenEnvironmentObjects;
     [SerializeField] private EnvironmentType _environmentType;
     [SerializeField] private EnvironmentAbstract _environmentAbstract;
@@ -41,7 +42,14 @@ public class SingleEnvironmentController : MonoBehaviour
                 _moneyArea.Initialize(this);
             }
             _moneyArea.gameObject.SetActive(!_environmentData.isPaid);
-            _environmentObject.gameObject.SetActive(_environmentData.isPaid);
+            foreach (var item in _openEnvironmentObject)
+            {
+                item.SetActive(_environmentData.isPaid);
+            }
+            foreach (var item in _closeEnvironmentObject)
+            {
+                item.SetActive(!_environmentData.isPaid);
+            }
             _moneyArea.SetCurrentPrice(_environmentData.currentPrice);
             SetLevelObject();
         }
@@ -56,7 +64,15 @@ public class SingleEnvironmentController : MonoBehaviour
     public virtual void PaidArea()
     {
         _moneyArea.gameObject.SetActive(false);
-        _environmentObject.gameObject.SetActive(true);
+
+        foreach (var item in _openEnvironmentObject)
+        {
+            item.SetActive(true);
+        }
+        foreach (var item in _closeEnvironmentObject)
+        {
+            item.SetActive(false);
+        }
         _environmentData.isPaid = true;
         UpLevel();
 
